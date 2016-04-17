@@ -10,7 +10,38 @@ import Foundation
 extension Hero {
     
     func planetData(dataFile: String) -> String {
-        return ""
+        
+        let planetDataJSON = NSBundle.mainBundle().URLForResource(dataFile, withExtension: "json")!
+        let rawPlanetDataJSON = NSData(contentsOfURL: planetDataJSON)!
+        
+        var planetDataDictionaries: [[String:AnyObject]]!
+        do {
+            planetDataDictionaries = try! NSJSONSerialization.JSONObjectWithData(rawPlanetDataJSON, options: NSJSONReadingOptions()) as! [[String:AnyObject]]
+        }
+        
+        
+        
+        var bestPlanet:String = ""
+        var bestPlanetScore: Int = 0
+        
+        
+        for planet in planetDataDictionaries {
+            
+            var planetScore: Int = 0
+            
+            planetScore += planet["CommonItemsDetected"] as! Int * 1
+            planetScore += planet["UncommonItemsDetected"] as! Int  * 2
+            planetScore += planet["RareItemsDetected"] as! Int  * 3
+            planetScore += planet["LegendaryItemsDetected"] as! Int  * 4
+            
+            if planetScore > bestPlanetScore {
+                bestPlanetScore = planetScore
+                bestPlanet = planet["Name"] as! String
+            }
+            
+        }
+        
+        return bestPlanet
     }
 }
 

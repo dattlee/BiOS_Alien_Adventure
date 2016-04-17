@@ -9,7 +9,23 @@
 extension Hero {
     
     func itemsFromPlanet(inventory: [UDItem], planet: String) -> [UDItem] {
-        return [UDItem]()
+        
+        var itemPackage = [UDItem]()
+        
+        for item in inventory {
+            if let name = item.historicalData["PlanetOfOrigin"] as? String{
+                switch name {
+                case planet:
+                    itemPackage.append(item)
+                    //print(item.name + "was added")
+                default:
+                    //print(item.name + " was not added")
+                    break
+                }
+            }
+        }
+         
+         return itemPackage
     }
     
 }
